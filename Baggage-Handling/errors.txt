@@ -1,0 +1,6 @@
+﻿src/App.vue(25,44): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Ref<"all" | "delayed" | "ontime", "all" | "delayed" | "ontime">'.
+  Type 'string' is not assignable to type 'Ref<"all" | "delayed" | "ontime", "all" | "delayed" | "ontime">'.
+src/main.ts(5,8): error TS2307: Cannot find module 'vuetify/styles' or its corresponding type declarations.
+src/main.ts(11,1): error TS6133: 'VueShepherdPlugin' is declared but its value is never read.
+src/main.ts(11,8): error TS1484: 'VueShepherdPlugin' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/main.ts(36,9): error TS2693: 'VueShepherdPlugin' only refers to a type, but is being used as a value here.

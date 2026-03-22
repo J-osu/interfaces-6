@@ -1,0 +1,118 @@
+/* Industrial Dark Theme for Shepherd */
+.shepherd-element.industrial-tour-theme {
+  background: #1e1e1e;
+  border: 1px solid #bb86fc;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(187, 134, 252, 0.2);
+  color: #e0e0e0;
+  font-family: 'Roboto', sans-serif;
+  max-width: 400px;
+  z-index: 99999 !important;
+}
+
+/* Ensure modal overlay is always behind the popup but above Vuetify */
+.shepherd-modal-overlay-container {
+  z-index: 99990 !important;
+}
+
+.shepherd-element.industrial-tour-theme .shepherd-header {
+  background: #2d2d2d;
+  border-bottom: 2px solid #333;
+  padding: 15px 20px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.shepherd-element.industrial-tour-theme .shepherd-title {
+  color: #bb86fc;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.shepherd-element.industrial-tour-theme .shepherd-text {
+  padding: 20px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #cfcfcf;
+}
+
+.shepherd-element.industrial-tour-theme .shepherd-footer {
+  padding: 10px 20px 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* Base button resets for Shepherd */
+.shepherd-button {
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Primary Button */
+.shepherd-btn-primary {
+  background-color: #bb86fc;
+  color: #121212;
+}
+.shepherd-btn-primary:hover {
+  background-color: #a371f7;
+}
+
+/* Secondary Button */
+.shepherd-btn-secondary {
+  background-color: transparent;
+  border: 1px solid #777;
+  color: #e0e0e0;
+}
+.shepherd-btn-secondary:hover {
+  background-color: #333;
+}
+
+/* Danger Button */
+.shepherd-btn-danger {
+  background-color: #cf6679;
+  color: #121212;
+  font-weight: 800;
+}
+.shepherd-btn-danger:hover {
+  background-color: #b55365;
+}
+
+/* Arrows */
+.shepherd-element.industrial-tour-theme .shepherd-arrow:before {
+  background: #2d2d2d; /* Match header or body */
+  border: 1px solid #bb86fc;
+}
+
+.shepherd-element.industrial-tour-theme[data-popper-placement^="bottom"] .shepherd-arrow:before {
+  background: #2d2d2d;
+}
+
+.shepherd-element.industrial-tour-theme[data-popper-placement^="top"] .shepherd-arrow:before {
+  background: #1e1e1e;
+}
+
+/* Cancel icon */
+.shepherd-cancel-icon {
+  color: #777;
+  transition: color 0.2s;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.shepherd-cancel-icon:hover {
+  color: #cf6679;
+}
