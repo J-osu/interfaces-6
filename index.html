@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>El Arte del Barista</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.global.prod.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, serif;
+      background: #1a1008;
+      color: #f0e0c0;
+    }
+
+    /* ── Sección hero (no hace scroll, fija en pantalla) ── */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 12px;
+    }
+    .hero h1 { font-size: 2.4rem; letter-spacing: 2px; }
+    .hero p  { color: #b08060; font-size: 1rem; }
+    .flecha  { margin-top: 24px; font-size: 1.5rem; animation: bajar .8s infinite alternate; }
+    @keyframes bajar { to { transform: translateY(8px); } }
+
+    /* ── Zona de scroll: el sticky container ── */
+    .zona-scroll {
+      position: relative;
+      /* Altura total = cuánto quieres scrollear. Más altura = animación más lenta */
+      height: 400vh;
+    }
+
+    .sticky-escena {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ── Lottie ── */
+    #lottie-contenedor {
+      width: min(500px, 90vw);
+      height: min(500px, 90vw);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Tarjetas informativas ── */
+    .tarjetas-wrapper {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .tarjeta {
+      position: absolute;
+      background: rgba(20, 10, 0, 0.82);
+      border: 1px solid #80502a;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      max-width: 180px;
+      backdrop-filter: blur(4px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .tarjeta strong { display: block; color: #e8a060; margin-bottom: 2px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Posiciones de cada tarjeta (ajusta a gusto) */
+    .tarjeta-0 { top: 15%; left:  5%; }
+    .tarjeta-1 { top: 20%; right: 5%; }
+    .tarjeta-2 { bottom: 20%; left: 5%; }
+    .tarjeta-3 { bottom: 15%; right: 5%; }
+
+    /* Estado oculto */
+    .tarjeta-oculta {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    /* Estado visible */
+    .tarjeta-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Barra de progreso (opcional, útil para depurar) ── */
+    .barra-progreso {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: #e8a060;
+      z-index: 100;
+      transition: width 0.05s linear;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      text-align: center;
+    }
+    .footer h2 { font-size: 1.8rem; }
+    .footer p  { color: #b08060; }
+  </style>
+</head>
+<body>
+<div id="app">
+
+  <!-- Barra de progreso del scroll -->
+  <div class="barra-progreso" :style="{ width: progresoPct + '%' }"></div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>☕ El Arte del Barista</h1>
+    <p>Haz scroll y observa cómo preparamos tu café</p>
+    <div class="flecha">↓</div>
+  </section>
+
+  <!-- Zona de scroll con sticky -->
+  <div class="zona-scroll" ref="zonaRef">
+    <div class="sticky-escena">
+
+      <!-- Animación Lottie -->
+      <div id="lottie-contenedor"></div>
+
+      <!-- Tarjetas informativas -->
+      <div class="tarjetas-wrapper">
+        <div
+          v-for="(tarjeta, i) in tarjetas"
+          :key="i"
+          :class="['tarjeta', `tarjeta-${i}`, tarjetasVisibles[i] ? 'tarjeta-visible' : 'tarjeta-oculta']"
+        >
+          <strong>{{ tarjeta.titulo }}</strong>
+          {{ tarjeta.valor }}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <h2>Listo para disfrutar</h2>
+    <p>Cada taza, una historia.</p>
+  </footer>
+
+</div>
+
+<script>
+const { createApp, ref, reactive, onMounted, onUnmounted, computed } = Vue;
+
+createApp({
+  setup() {
+    const zonaRef = ref(null);
+    const progreso = ref(0);          // 0..1
+    const progresoPct = computed(() => Math.round(progreso.value * 100));
+
+    // Tarjetas: aparecen en distintos puntos del progreso (0..1)
+    const tarjetas = [
+      { titulo: 'Temperatura',    valor: '92 °C — agua perfecta',      desde: 0.15 },
+      { titulo: 'Molienda',       valor: 'Fina, recién molida',         desde: 0.35 },
+      { titulo: 'Tiempo extracción', valor: '25 – 30 segundos',         desde: 0.55 },
+      { titulo: 'Ratio',          valor: '1:15 café / agua',            desde: 0.75 },
+    ];
+
+    // Estado de visibilidad reactivo
+    const tarjetasVisibles = reactive(tarjetas.map(() => false));
+
+    // Lottie
+    let animacion = null;
+    let totalFrames = 0;
+
+    function iniciarLottie() {
+      animacion = lottie.loadAnimation({
+        container: document.getElementById('lottie-contenedor'),
+        renderer: 'svg',
+        loop: false,
+        autoplay: false,
+        // Animación de café pública de LottieFiles (CDN directo)
+        path: 'https://assets10.lottiefiles.com/packages/lf20_5njpvhs0.json',
+      });
+
+      animacion.addEventListener('DOMLoaded', () => {
+        totalFrames = animacion.totalFrames;
+      });
+    }
+
+    function manejarScroll() {
+      const zona = zonaRef.value;
+      if (!zona) return;
+
+      const { top, height } = zona.getBoundingClientRect();
+      const scrollable = height - window.innerHeight;
+      // top empieza en 0 cuando la zona llega al borde superior
+      const desplazado = -top;
+      const p = Math.min(1, Math.max(0, desplazado / scrollable));
+      progreso.value = p;
+
+      // Controlar frame de Lottie
+      if (animacion && totalFrames > 0) {
+        const frame = Math.floor(p * totalFrames);
+        animacion.goToAndStop(frame, true);
+      }
+
+      // Actualizar visibilidad de tarjetas
+      tarjetas.forEach((t, i) => {
+        tarjetasVisibles[i] = p >= t.desde;
+      });
+    }
+
+    onMounted(() => {
+      iniciarLottie();
+      window.addEventListener('scroll', manejarScroll, { passive: true });
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', manejarScroll);
+      if (animacion) animacion.destroy();
+    });
+
+    return { zonaRef, progreso, progresoPct, tarjetas, tarjetasVisibles };
+  }
+}).mount('#app');
+</script>
+</body>
+</html>
